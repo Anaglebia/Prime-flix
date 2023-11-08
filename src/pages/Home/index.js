@@ -5,10 +5,11 @@ import './home.css';
 
 function Home() {
     const [filmes, setFilmes] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     useEffect(()=>{
         async function loadFilmes(){
-            const respose = await api.get('movie/now_playing',{
+            const response = await api.get('movie/now_playing',{
                 params:{
                     api_key:'d6c319b615dfe7bf9a2939314c9cd34e',
                     language:'pt-BR',
@@ -17,11 +18,20 @@ function Home() {
             })
 
             // console.log(respose.data.results.slice(0,10));
-            setFilmes(respose.data.results.slice(0,10));
+            setFilmes(response.data.results.slice(0,10));
+            setLoading(false);
         }
 
         loadFilmes();
     },[])
+
+    if(loading){
+        return(
+            <div className="loading">
+                <h2>Carregando filme...</h2>
+            </div>
+        )
+    }
     return (
       <div className="container">
         <div className="lista_filme">
